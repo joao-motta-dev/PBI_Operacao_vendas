@@ -1,0 +1,50 @@
+table Altera_Medida
+	lineageTag: 91ad7256-71f7-4384-9b0b-6459789aca9d
+
+	column Altera_Medida
+		lineageTag: 6833c2bb-5672-4412-a95d-9b2a800d355a
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Altera_Medida Pedido'
+
+		relatedColumnDetails
+			groupByColumn: 'Altera_Medida Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Altera_Medida Campos'
+		isHidden
+		lineageTag: 4b9cddad-b691-4eb8-8a5c-2069f7db2420
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Altera_Medida Pedido'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Altera_Medida Pedido'
+		isHidden
+		formatString: 0
+		lineageTag: 8596c811-c986-4bb2-91da-520a362d91d1
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Altera_Medida = calculated
+		mode: import
+		source =
+				{
+				    ("Qtde Vendas", NAMEOF('@_Medidas'[Qtde_Vendas]), 0),
+				    ("Faturamento Bruto", NAMEOF('@_Medidas'[Faturamento_Bruto]), 1),
+				    ("Ticket Médio", NAMEOF('@_Medidas'[Ticket_Medio]), 2),
+				    ("Itens Vendidos", NAMEOF('@_Medidas'[Itens_Vendidos]), 3)
+				}
+
+	annotation PBI_Id = 95c70a9ff5c245bdb213aa2e87a86820
+

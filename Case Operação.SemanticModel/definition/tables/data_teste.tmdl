@@ -1,0 +1,25 @@
+table data_teste
+	isHidden
+	lineageTag: 61c9edcd-4f82-4102-848b-999a6806a4f0
+
+	column Date
+		isHidden
+		formatString: General Date
+		lineageTag: d61574cf-ebf2-4921-820a-dbc11a574aa6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: b5a9d6f5-ab65-4fbc-9c25-e1484d701b13
+			defaultHierarchy: LocalDateTable_1105e502-7a86-4edf-afbc-171864cdf1ed.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition data_teste = calculated
+		mode: import
+		source = CALENDARAUTO()
+
+	annotation PBI_Id = e1a7e353856e416295b4c313dcf4caad
+

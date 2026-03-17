@@ -1,0 +1,135 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 392.1785993004803,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1476.17859930048,
+            "y": 0
+          },
+          "nodeIndex": "D_Carimbo",
+          "nodeLineageTag": "e4c0d503-b723-44d2-bfef-77b84d02f8a9",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 285,
+            "y": 0
+          },
+          "nodeIndex": "F_Vendas",
+          "nodeLineageTag": "ed7ad838-0b06-4ba2-92f1-42aeb230fee6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 295,
+            "y": 497
+          },
+          "nodeIndex": "D_Calendario",
+          "nodeLineageTag": "f5873a1b-4c3f-4621-8032-9cbfa438a2ae",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 1470.9505998587636,
+            "y": 173.80534319633853
+          },
+          "nodeIndex": "@_Medidas",
+          "nodeLineageTag": "68122390-1ce7-40a3-ae33-a9d537e351c1",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 705.56531807358942,
+            "y": 50.876060294597835
+          },
+          "nodeIndex": "D_Municipio",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 1475.17859930048,
+            "y": 272.5
+          },
+          "nodeIndex": "Parametro_1",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1475.17859930048,
+            "y": 272.5
+          },
+          "nodeIndex": "Altera_Medida",
+          "nodeLineageTag": "91ad7256-71f7-4384-9b0b-6459789aca9d",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1475.17859930048,
+            "y": 248.5
+          },
+          "nodeIndex": "data_teste",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1475.17859930048,
+            "y": 248.5
+          },
+          "nodeIndex": "date_teste_2",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 100.00000000000003,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

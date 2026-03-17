@@ -1,0 +1,71 @@
+table D_Municipio
+	lineageTag: 9073459d-0d53-4267-bd0f-e7b33ec278e5
+
+	column Municipios
+		dataType: string
+		lineageTag: 1af277c7-0f1f-4f4c-b372-d491db0e40e7
+		summarizeBy: none
+		sourceColumn: Municipios
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'UF Nome'
+		dataType: string
+		lineageTag: 1da26816-8cba-4dd9-aae7-a2c9c0e614a6
+		summarizeBy: none
+		sourceColumn: UF Nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Regiao Nome'
+		dataType: string
+		lineageTag: cbed5c5b-712d-4554-bb1d-d2d66896e462
+		summarizeBy: none
+		sourceColumn: Regiao Nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'UF Codigo'
+		dataType: string
+		lineageTag: be2764eb-3af0-4aa3-9136-7241e3b87cb6
+		summarizeBy: none
+		sourceColumn: UF Codigo
+
+		annotation SummarizationSetBy = Automatic
+
+	column LATITUDE
+		dataType: double
+		lineageTag: 32987124-fa50-40bd-983c-a9c498914a99
+		summarizeBy: none
+		sourceColumn: LATITUDE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LONGITUDE
+		dataType: double
+		lineageTag: c1f52341-5a0e-4166-8459-a5d97c4bdf58
+		summarizeBy: none
+		sourceColumn: LONGITUDE
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition D_Municipio = m
+		mode: import
+		queryGroup: Ouro
+		source =
+				let
+				    Fonte = Step_municipios,
+				    #"Linhas Filtradas" = Table.SelectRows(Fonte, each [UF Nome] <> null and [UF Nome] <> ""),
+				    #"Linhas Classificadas" = Table.Sort(#"Linhas Filtradas",{{"Municipios", Order.Ascending}}),
+				    #"Linhas Filtradas1" = Table.SelectRows(#"Linhas Classificadas", each ([Regiao Nome] = "Sul") and ([UF Nome] = "Santa Catarina"))
+				in
+				    #"Linhas Filtradas1"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

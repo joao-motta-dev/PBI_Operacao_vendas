@@ -1,0 +1,229 @@
+table F_Vendas
+	lineageTag: ed7ad838-0b06-4ba2-92f1-42aeb230fee6
+
+	column data_entrega
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a4a09e1f-56e1-4d9f-895b-f7007cd097c3
+		summarizeBy: none
+		sourceColumn: data_entrega
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column vendedor_cod
+		dataType: string
+		lineageTag: 8a2cb3bf-49d4-41ae-86f6-9f9e0510ee64
+		summarizeBy: none
+		sourceColumn: vendedor_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendedor_nom
+		dataType: string
+		lineageTag: f2f3fc47-e747-41b1-a434-c5ff4d0e44c5
+		summarizeBy: none
+		sourceColumn: vendedor_nom
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendedor_supervisor
+		dataType: string
+		lineageTag: 7447f5da-dd6b-4137-92c7-fa192a81d998
+		summarizeBy: none
+		sourceColumn: vendedor_supervisor
+
+		annotation SummarizationSetBy = Automatic
+
+	column vendedor_equipe
+		dataType: string
+		lineageTag: 02ad98c1-93f4-4558-a296-c6a94e330c46
+		summarizeBy: none
+		sourceColumn: vendedor_equipe
+
+		annotation SummarizationSetBy = Automatic
+
+	column produto_cod
+		dataType: string
+		lineageTag: d7ca7bc4-32ad-404d-bf0e-e458f3f88cf4
+		summarizeBy: none
+		sourceColumn: produto_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column produto_nome
+		dataType: string
+		lineageTag: 493e69da-2276-4b99-bc32-00bfe25c8506
+		summarizeBy: none
+		sourceColumn: produto_nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column produto_grupo
+		dataType: string
+		lineageTag: 94cf2cec-6678-47cf-9624-0fb562039c50
+		summarizeBy: none
+		sourceColumn: produto_grupo
+
+		annotation SummarizationSetBy = Automatic
+
+	column produto_linha
+		dataType: string
+		lineageTag: 617d2022-2606-4d49-881e-2b9c613bf0c4
+		summarizeBy: none
+		sourceColumn: produto_linha
+
+		annotation SummarizationSetBy = Automatic
+
+	column produto_fornecedor
+		dataType: string
+		lineageTag: df7f7aa1-76cf-4ec5-9fd5-164999deb9c5
+		summarizeBy: none
+		sourceColumn: produto_fornecedor
+
+		annotation SummarizationSetBy = Automatic
+
+	column produto_custo_unitario
+		dataType: string
+		lineageTag: b9a5c7e1-3258-4f7e-b1ca-13433b73827b
+		summarizeBy: none
+		sourceColumn: produto_custo_unitario
+
+		annotation SummarizationSetBy = Automatic
+
+	column qtd_itens
+		dataType: double
+		formatString: 0
+		lineageTag: 6b5c1e3b-5d43-4ed2-be22-409e29bcc562
+		summarizeBy: sum
+		sourceColumn: qtd_itens
+
+		annotation SummarizationSetBy = Automatic
+
+	column preco_unitario
+		dataType: double
+		lineageTag: 42da79c8-1196-4fdf-9057-5d2624bef535
+		summarizeBy: sum
+		sourceColumn: preco_unitario
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column valor_bruto
+		dataType: double
+		lineageTag: 5f2aa019-0ab6-4189-9045-0e46f23ab6f2
+		summarizeBy: sum
+		sourceColumn: valor_bruto
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ocorrencia_devolucao
+		dataType: double
+		formatString: 0
+		lineageTag: 70daeedf-eae6-432d-8788-69dc1faa0cbd
+		summarizeBy: sum
+		sourceColumn: ocorrencia_devolucao
+
+		annotation SummarizationSetBy = Automatic
+
+	column num_venda
+		dataType: string
+		lineageTag: 9abc65cb-e66f-4fb8-8809-688bfcd9218a
+		summarizeBy: none
+		sourceColumn: num_venda
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_venda
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 097d9659-42e5-4174-b24d-ae5c5f846996
+		summarizeBy: none
+		sourceColumn: data_venda
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column data_entrega_prevista
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c4b02461-108a-4ec9-9d7c-c0dbd77dd6e9
+		summarizeBy: none
+		sourceColumn: data_entrega_prevista
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column cliente_cod
+		dataType: string
+		lineageTag: ba264972-4d82-4cce-95a4-2f4c9e0734c0
+		summarizeBy: none
+		sourceColumn: cliente_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column cliente_nome
+		dataType: string
+		lineageTag: ee35e3c8-0145-4f70-9ba0-1fa4e21cac31
+		summarizeBy: none
+		sourceColumn: cliente_nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column cliente_segmento
+		dataType: string
+		lineageTag: 3781e246-6409-49aa-bb3d-2fab15666de5
+		summarizeBy: none
+		sourceColumn: cliente_segmento
+
+		annotation SummarizationSetBy = Automatic
+
+	column cidade_cod
+		dataType: string
+		lineageTag: 23e873a8-da22-4a0d-a704-e8d80d1a99a5
+		summarizeBy: none
+		sourceColumn: cidade_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column cidade_nom
+		dataType: string
+		lineageTag: 493e73cd-1b90-4dc8-be57-5b9ede5ae430
+		summarizeBy: none
+		sourceColumn: cidade_nom
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Entrega No Prazo' = IF(F_Vendas[data_entrega] <= F_Vendas[data_entrega_prevista], 1 ,BLANK())
+		formatString: 0
+		lineageTag: a769f49e-1e61-4cb9-9ad9-cc9708ae92e1
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Devolucao = IF(F_Vendas[ocorrencia_devolucao] = 0, "Sem devolução", "Com devolução")
+		lineageTag: 48150efb-a4de-4d54-bf40-3aaedbbd881b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition F_Vendas = m
+		mode: import
+		queryGroup: Ouro
+		source =
+				let
+				    Fonte = Step_fim,
+				    #"Linhas Filtradas" = Table.SelectRows(Fonte, each [cliente_cod] <> "cliente_cod")
+				in
+				    #"Linhas Filtradas"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

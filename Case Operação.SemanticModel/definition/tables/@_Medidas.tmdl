@@ -1,0 +1,122 @@
+table @_Medidas
+	lineageTag: 68122390-1ce7-40a3-ae33-a9d537e351c1
+
+	measure Qtde_Vendas = CALCULATE(DISTINCTCOUNT(F_Vendas[num_venda]), USERELATIONSHIP(F_Vendas[data_venda], D_Calendario[Date]))
+		formatString: 0
+		lineageTag: 365c12ed-3cc0-45f9-8ba8-c55d0d161f64
+
+	measure Faturamento_Bruto = CALCULATE(SUM(F_Vendas[valor_bruto]), USERELATIONSHIP(F_Vendas[data_venda], D_Calendario[Date]))
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 2434fd74-f1d9-45da-ba61-ef8b4d855e1b
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure Ticket_Medio = [Faturamento_Bruto]/[Qtde_Vendas]
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: 56506cb3-c1fa-4a0b-8942-cd7791ac8525
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure Itens_Vendidos = CALCULATE(SUM(F_Vendas[qtd_itens]), USERELATIONSHIP(F_Vendas[data_venda], D_Calendario[Date]))
+		lineageTag: f552ba39-9eb0-4fc9-8419-dbd052c4d8d4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Entregas_no_prazo =
+			
+			
+			CALCULATE(
+			    count(F_Vendas[Entrega No Prazo])/COUNT(F_Vendas[data_entrega]),
+			    USERELATIONSHIP(F_Vendas[data_entrega], D_Calendario[Date])
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 12b56e68-4605-4717-af22-343a7d1562bd
+
+	measure %_Devolucao =
+			
+			
+			CALCULATE(
+			    SUM(F_Vendas[ocorrencia_devolucao])/COUNTROWS(F_Vendas),
+			    USERELATIONSHIP(F_Vendas[data_venda],D_Calendario[Date])
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 5678c24d-6108-4573-8a3a-91fdfe7b168b
+
+	measure Pecas_Atendimento = [Itens_Vendidos]/[Qtde_Vendas]
+		lineageTag: 4af68efd-e03b-417e-97a8-ea7e48408bf2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Registros_Geral =
+			
+			
+			CALCULATE(
+			    COUNTROWS(F_Vendas),
+			    USERELATIONSHIP(F_Vendas[data_venda],D_Calendario[Date])
+			)
+		formatString: 0
+		lineageTag: fdf218ec-1b17-40bd-b90d-bb2def2347ac
+
+	measure Itenss_Devolvidos =
+			
+			
+			CALCULATE(
+			        SUM(F_Vendas[qtd_itens]),
+			    F_Vendas[ocorrencia_devolucao] = 1,
+			    USERELATIONSHIP(F_Vendas[data_venda],D_Calendario[Date])
+			)
+		formatString: 0
+		lineageTag: a07adfdf-efb2-423f-aaa1-44565f29ca5b
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure Faturamento_Perdido =
+			
+			
+			CALCULATE(
+			    SUM(F_Vendas[valor_bruto]),
+			    F_Vendas[ocorrencia_devolucao] = 1,
+			    USERELATIONSHIP(F_Vendas[data_venda],D_Calendario[Date])
+			)
+		formatString: "R$"\ #,0.00;-"R$"\ #,0.00;"R$"\ #,0.00
+		lineageTag: fc0ea991-1451-4e19-8665-436ea2546b66
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	measure Selec_Indicador = ```
+			SWITCH(
+			    VALUES(Altera_Medida[Altera_Medida Pedido]),
+			    0, [Qtde_Vendas],
+			    1, [Faturamento_Bruto],
+			    2, [Ticket_Medio],
+			    3, [Itens_Vendidos])
+			
+			--SWITCH(MAX(Selecao_Indicadores[Indicadores]), 
+			    --"Faturamento Bruto", [Faturamento_Bruto],
+			   -- "Itens Devolvidos", [Itenss_Devolvidos],
+			    --"Itens Vendidos", [Itens_Vendidos],
+			    --"PA", [Pecas_Atendimento],
+			   -- "Qtde de Vendas", [Qtde_Vendas],
+			    --"Ticket Médio", [Ticket_Medio])))))
+			```
+		lineageTag: a54b14ac-575e-4c1a-8e67-1045a2c33984
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		formatString: 0
+		lineageTag: c51ca251-64e7-405a-83a2-c7a03b8a1b36
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition @_Medidas = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 72fb38acf5584f249380ae3251da2ac5
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

@@ -1,0 +1,164 @@
+expression Original =
+		let
+		    Fonte = Excel.Workbook(File.Contents("C:\Users\jgsmo\Documents\Cases ou Antigos\Dataside\base_processo_seletivo_dataside.xlsx"), null, true),
+		    Export_Sheet = Fonte{[Item="Export",Kind="Sheet"]}[Data],
+		    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Export_Sheet, [PromoteAllScalars=true]),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"Relatório de vendas", type any}, {"Column2", type any}, {"Column3", type any}, {"Column4", type any}, {"Column5", type any}, {"Column6", type text}, {"Column7", type text}, {"Column8", type text}, {"Column9", type any}, {"Column10", type text}, {"Column11", type text}, {"Column12", type any}, {"Column13", type text}, {"Column14", type any}, {"Column15", type text}, {"Column16", type text}, {"Column17", type text}, {"Column18", type text}, {"Column19", type any}, {"Column20", type any}, {"Column21", type any}, {"Column22", type any}, {"Column23", type any}})
+		in
+		    #"Tipo Alterado"
+	lineageTag: f77cf4c2-66e7-4a41-b0e1-4e6d370e31c8
+	queryGroup: Bronze
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression Step_fim =
+		let
+		    Fonte = Original,
+		    #"Cabeçalhos Promovidos1" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+		    #"Cabeçalhos Promovidos2" = Table.PromoteHeaders(#"Cabeçalhos Promovidos1", [PromoteAllScalars=true]),
+		    #"Cabeçalhos Promovidos3" = Table.PromoteHeaders(#"Cabeçalhos Promovidos2", [PromoteAllScalars=true]),
+		    #"Cabeçalhos Promovidos4" = Table.PromoteHeaders(#"Cabeçalhos Promovidos3", [PromoteAllScalars=true]),
+		    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(#"Cabeçalhos Promovidos4", [PromoteAllScalars=true]),
+		    #"Cabeçalhos Promovidos5" = Table.PromoteHeaders(#"Cabeçalhos Promovidos", [PromoteAllScalars=true]),
+		    #"Cabeçalhos Promovidos6" = Table.PromoteHeaders(#"Cabeçalhos Promovidos5", [PromoteAllScalars=true]),
+		    #"Colunas Renomeadas" = Table.RenameColumns(#"Cabeçalhos Promovidos6",{{"Column9", "cliente_cod"}, {"Column10", "cliente_nome"}, {"Column11", "cliente_segmento"}, {"Column12", "cidade_cod"}, {"Column13", "cidade_nom"}, {"Column2", "data_venda"}}),
+		    #"Colunas Renomeadas1" = Table.RenameColumns(#"Colunas Renomeadas",{{"Column3", "data_entrega_prevista"}}),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"Colunas Renomeadas1",{{"data_entrega", type date}, {"data_entrega_prevista", type date}, {"data_venda", type date}, {"num_venda", type text}, {"vendedor_cod", type text}, {"cliente_cod", type text}, {"cidade_cod", type text}, {"qtd_itens", type number}, {"preco_unitario", type number}, {"valor_bruto", type number}, {"ocorrencia_devolucao", type number}}),
+		    #"Linhas em Branco Removidas" = Table.SelectRows(#"Tipo Alterado", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+		    #"Linhas Filtradas" = Table.SelectRows(#"Linhas em Branco Removidas", each not Text.StartsWith([num_venda], "Nenhum")),
+		    #"Linhas Filtradas1" = Table.SelectRows(#"Linhas Filtradas", each [cidade_nom] <> "cidade_nom")
+		in
+		    #"Linhas Filtradas1"
+	lineageTag: 9526f665-4ae3-42ab-9ed8-46d675a83b7f
+	queryGroup: Prata
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression municipios_ibge_api =
+		let
+		    Fonte = Json.Document(Web.Contents("https://servicodados.ibge.gov.br/api/v1/localidades/municipios")),
+		    #"Convertido para Tabela" = Table.FromList(Fonte, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+		    #"Column1 Expandido" = Table.ExpandRecordColumn(#"Convertido para Tabela", "Column1", {"id", "nome", "microrregiao", "regiao-imediata"}, {"id", "nome", "microrregiao", "regiao-imediata"}),
+		    #"regiao-imediata Expandido" = Table.ExpandRecordColumn(#"Column1 Expandido", "regiao-imediata", {"id", "nome", "regiao-intermediaria"}, {"regiao-imediata.id", "regiao-imediata.nome", "regiao-imediata.regiao-intermediaria"}),
+		    #"regiao-imediata.regiao-intermediaria Expandido" = Table.ExpandRecordColumn(#"regiao-imediata Expandido", "regiao-imediata.regiao-intermediaria", {"id", "nome", "UF"}, {"regiao-imediata.regiao-intermediaria.id", "regiao-imediata.regiao-intermediaria.nome", "regiao-imediata.regiao-intermediaria.UF"}),
+		    #"regiao-imediata.regiao-intermediaria.UF Expandido" = Table.ExpandRecordColumn(#"regiao-imediata.regiao-intermediaria Expandido", "regiao-imediata.regiao-intermediaria.UF", {"id", "sigla", "nome", "regiao"}, {"regiao-imediata.regiao-intermediaria.UF.id", "regiao-imediata.regiao-intermediaria.UF.sigla", "regiao-imediata.regiao-intermediaria.UF.nome", "regiao-imediata.regiao-intermediaria.UF.regiao"}),
+		    #"regiao-imediata.regiao-intermediaria.UF.regiao Expandido" = Table.ExpandRecordColumn(#"regiao-imediata.regiao-intermediaria.UF Expandido", "regiao-imediata.regiao-intermediaria.UF.regiao", {"id", "sigla", "nome"}, {"regiao-imediata.regiao-intermediaria.UF.regiao.id", "regiao-imediata.regiao-intermediaria.UF.regiao.sigla", "regiao-imediata.regiao-intermediaria.UF.regiao.nome"}),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"regiao-imediata.regiao-intermediaria.UF.regiao Expandido",{{"id", Int64.Type}, {"nome", type text}, {"microrregiao", type any}, {"regiao-imediata.id", Int64.Type}, {"regiao-imediata.nome", type text}, {"regiao-imediata.regiao-intermediaria.id", Int64.Type}, {"regiao-imediata.regiao-intermediaria.nome", type text}, {"regiao-imediata.regiao-intermediaria.UF.id", Int64.Type}, {"regiao-imediata.regiao-intermediaria.UF.sigla", type text}, {"regiao-imediata.regiao-intermediaria.UF.nome", type text}, {"regiao-imediata.regiao-intermediaria.UF.regiao.id", Int64.Type}, {"regiao-imediata.regiao-intermediaria.UF.regiao.sigla", type text}, {"regiao-imediata.regiao-intermediaria.UF.regiao.nome", type text}}),
+		    #"Colunas Removidas" = Table.RemoveColumns(#"Tipo Alterado",{"microrregiao", "regiao-imediata.id", "regiao-imediata.nome", "regiao-imediata.regiao-intermediaria.id", "regiao-imediata.regiao-intermediaria.nome", "regiao-imediata.regiao-intermediaria.UF.id", "regiao-imediata.regiao-intermediaria.UF.regiao.id", "regiao-imediata.regiao-intermediaria.UF.regiao.sigla"})
+		in
+		    #"Colunas Removidas"
+	lineageTag: c52c874f-4f9d-4c1b-b821-4b79ae005ea8
+	queryGroup: Bronze
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression Step_municipios =
+		let
+		    Fonte = Step_fim [cidade_nom],
+		    #"Convertido para Tabela" = Table.FromList(Fonte, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+		    #"Duplicatas Removidas" = Table.Distinct(#"Convertido para Tabela", {"Column1"}),
+		    #"Consultas Mescladas" = Table.NestedJoin(#"Duplicatas Removidas", {"Column1"}, Step_ibge, {"Nome Ajuste"}, "Step_ibge", JoinKind.LeftOuter),
+		    #"Step_ibge Expandido" = Table.ExpandTableColumn(#"Consultas Mescladas", "Step_ibge", {"LATITUDE", "LONGITUDE", "regiao-imediata.regiao-intermediaria.UF.nome", "regiao-imediata.regiao-intermediaria.UF.regiao.nome", "regiao-imediata.regiao-intermediaria.UF.sigla"}, {"LATITUDE", "LONGITUDE", "regiao-imediata.regiao-intermediaria.UF.nome", "regiao-imediata.regiao-intermediaria.UF.regiao.nome", "regiao-imediata.regiao-intermediaria.UF.sigla"}),
+		    #"Colunas Renomeadas" = Table.RenameColumns(#"Step_ibge Expandido",{{"Column1", "Municipios"}, {"regiao-imediata.regiao-intermediaria.UF.nome", "UF Nome"}, {"regiao-imediata.regiao-intermediaria.UF.regiao.nome", "Regiao Nome"}, {"regiao-imediata.regiao-intermediaria.UF.sigla", "UF Codigo"}})
+		in
+		    #"Colunas Renomeadas"
+	lineageTag: b51f28dc-187b-40dd-8e1a-46ba1aa3fb0d
+	queryGroup: Prata
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression Step_ibge =
+		let
+		    Fonte = municipios_ibge_api,
+		    #"Função Personalizada Invocada" = Table.AddColumn(Fonte, "Nome Ajuste", each fnRemoverAcentos([nome])),
+		    #"Texto em Maiúscula" = Table.TransformColumns(#"Função Personalizada Invocada",{{"Nome Ajuste", Text.Upper, type text}}),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"Texto em Maiúscula",{{"id", type text}}),
+		    #"Consultas Mescladas" = Table.NestedJoin(#"Tipo Alterado", {"id"}, Step_mapa, {"IBGE7"}, "Step_mapa", JoinKind.LeftOuter),
+		    #"Step_mapa Expandido" = Table.ExpandTableColumn(#"Consultas Mescladas", "Step_mapa", {"LATITUDE", "LONGITUDE"}, {"LATITUDE", "LONGITUDE"})
+		in
+		    #"Step_mapa Expandido"
+	lineageTag: fdf80613-a768-4dac-be65-d982768835bc
+	queryGroup: Prata
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression fnRemoverAcentos = ```
+		(texto as any) =>
+		let
+		    // Verifica se o valor é nulo para evitar erros
+		    txt = if texto = null then "" else Text.From(texto),
+		    
+		    // Listas expandidas
+		    comAcento = {"á","à","â","ã","ä","é","è","ê","ë","í","ì","î","ï","ó","ò","ô","õ","ö","ú","ù","û","ü","ç","Á","À","Â","Ã","Ä","É","È","Ê","Ë","Í","Ì","Î","Ï","Ó","Ò","Ô","Õ","Ö","Ú","Ù","Û","Ü","Ç"},
+		    semAcento = {"a","a","a","a","a","e","e","e","e","i","i","i","i","o","o","o","o","o","u","u","u","u","c","A","A","A","A","A","E","E","E","E","I","I","I","I","O","O","O","O","O","U","U","U","U","C"},
+		    
+		    // Transforma as listas em um formato de "De/Para"
+		    pares = List.Zip({comAcento, semAcento}),
+		    
+		    // O segredo: List.Accumulate percorre a palavra e troca cada letra encontrada
+		    resultado = List.Accumulate(pares, txt, (estado, atual) => Text.Replace(estado, atual{0}, atual{1}))
+		in
+		    resultado
+		```
+	lineageTag: 85304f78-f16c-41c4-9915-f2366c4123a3
+	queryGroup: Prata
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Function
+
+expression Step_mapa =
+		let
+		    Fonte = MUNICIPIOS,
+		    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"IBGE7", type text}}),
+		    #"Outras Colunas Removidas" = Table.SelectColumns(#"Tipo Alterado",{"IBGE7", "NOME", "LATITUDE", "LONGITUDE"})
+		in
+		    #"Outras Colunas Removidas"
+	lineageTag: d12a3130-a0b6-4074-b35c-aa3b92fb5ca9
+	queryGroup: Prata
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression UTP =
+		let
+		    Fonte = Excel.Workbook(File.Contents("C:\Users\jgsmo\Documents\Cases ou Antigos\Dataside\APENDICE_VII__DADOS_DE_MUNICÍPIOS_E_UTP_PAN24.xlsx"), null, true),
+		    UTP_Sheet = Fonte{[Item="UTP",Kind="Sheet"]}[Data],
+		    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(UTP_Sheet, [PromoteAllScalars=true]),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"UTP_2020", Int64.Type}, {"SEDE_IBGE6", Int64.Type}, {"NOME_SEDE", type text}, {"SEDE_UF", type text}, {"LATITUDE", type number}, {"LONGITUDE", type number}, {"OD_EMBARQUES", Int64.Type}, {"OD_TERRESTRE", Int64.Type}, {"OD_TOTAL", Int64.Type}}),
+		    #"Outras Colunas Removidas" = Table.SelectColumns(#"Tipo Alterado",{"NOME_SEDE", "SEDE_UF", "LATITUDE", "LONGITUDE"})
+		in
+		    #"Outras Colunas Removidas"
+	lineageTag: aa0a0c21-1cbc-4568-980b-abf348b39aa1
+	queryGroup: Bronze
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
+expression MUNICIPIOS =
+		let
+		    Fonte = Excel.Workbook(File.Contents("C:\Users\jgsmo\Documents\Cases ou Antigos\Dataside\APENDICE_VII__DADOS_DE_MUNICÍPIOS_E_UTP_PAN24.xlsx"), null, true),
+		    MUNICIPIOS_Sheet = Fonte{[Item="MUNICIPIOS",Kind="Sheet"]}[Data],
+		    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(MUNICIPIOS_Sheet, [PromoteAllScalars=true]),
+		    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID_MUNICIPIO", type text}, {"ID_REGIAO", Int64.Type}, {"ID_UF", Int64.Type}, {"IBGE6", Int64.Type}, {"IBGE7", Int64.Type}, {"NOME", type text}, {"UF", type text}, {"REGIÃO", type text}, {"MUN-UF", type text}, {"LATITUDE", type number}, {"LONGITUDE", type number}, {"UTP_2020", Int64.Type}, {"SEDE_UTP", Int64.Type}, {"AML", Int64.Type}, {"AML%", Int64.Type}, {"FRONTEIRA", Int64.Type}, {"UC_FEDERAIS", Int64.Type}, {"INDÍGENAS", Int64.Type}, {"CAPITAL", Int64.Type}, {"VIAGENS_OD_2017", Int64.Type}})
+		in
+		    #"Tipo Alterado"
+	lineageTag: 1c11787c-d6d7-4930-8390-acbbc40d4d9b
+	queryGroup: Bronze
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

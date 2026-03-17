@@ -1,0 +1,39 @@
+relationship c79b9f0c-1bb5-4115-9a39-dc36c1fb3ef7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: D_Carimbo.Carimbo
+	toColumn: LocalDateTable_2ba107ea-7c31-485c-a8c6-14d4f0e46250.Date
+
+relationship 99fd1f6a-3de6-cfee-772a-4d969e1ff28a
+	fromColumn: F_Vendas.cidade_nom
+	toColumn: D_Municipio.Municipios
+
+relationship b5a9d6f5-ab65-4fbc-9c25-e1484d701b13
+	joinOnDateBehavior: datePartOnly
+	fromColumn: data_teste.Date
+	toColumn: LocalDateTable_1105e502-7a86-4edf-afbc-171864cdf1ed.Date
+
+relationship 76c152df-a165-4b15-94cb-9830d0898155
+	joinOnDateBehavior: datePartOnly
+	fromColumn: date_teste_2.Date
+	toColumn: LocalDateTable_bea867a2-9b21-4947-9e4b-85fb6a4cc1d6.Date
+
+relationship 1e609f6d-48b0-4adb-b4a9-80f2ace3a109
+	joinOnDateBehavior: datePartOnly
+	fromColumn: D_Calendario.Date
+	toColumn: LocalDateTable_c789afb9-26cb-476e-a084-8e1c3d6698c6.Date
+
+relationship 959d7965-c22e-a628-58fd-074590edc84b
+	isActive: false
+	fromColumn: F_Vendas.data_entrega
+	toColumn: D_Calendario.Date
+
+relationship 047d4637-5d54-b237-a765-8c66dc8f2f3d
+	isActive: false
+	fromColumn: F_Vendas.data_entrega_prevista
+	toColumn: D_Calendario.Date
+
+relationship faaa9a43-c587-63da-6852-16278de67696
+	isActive: false
+	fromColumn: F_Vendas.data_venda
+	toColumn: D_Calendario.Date
+

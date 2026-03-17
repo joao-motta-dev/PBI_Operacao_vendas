@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Case Operação"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "6c41d457-1bed-4fef-8157-7a4ab7657c84"
+  }
+}

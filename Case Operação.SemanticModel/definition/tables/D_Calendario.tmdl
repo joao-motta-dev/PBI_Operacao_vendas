@@ -1,0 +1,86 @@
+table D_Calendario
+	lineageTag: f5873a1b-4c3f-4621-8032-9cbfa438a2ae
+
+	column Date
+		formatString: Short Date
+		lineageTag: 228a4bcc-dfaf-4087-a511-572d107710e2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: 1e609f6d-48b0-4adb-b4a9-80f2ace3a109
+			defaultHierarchy: LocalDateTable_c789afb9-26cb-476e-a084-8e1c3d6698c6.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		formatString: 0
+		lineageTag: f4f5fced-f1a5-4180-b9aa-4ae4c7ce3452
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Ano]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes_Nome
+		lineageTag: 6c8700de-431a-46ac-a30a-adb64f88343d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes_Nome]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes_Numero
+		formatString: 0
+		lineageTag: 4c2868dd-bd18-4fbf-a4a0-c72a5793c9f8
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Mes_Numero]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes_ano
+		lineageTag: d5b5c789-969c-4be1-82d7-3ad585738248
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes_ano]
+		sortByColumn: Serial_mes_ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column Serial_mes_ano
+		lineageTag: 37029e7b-c459-42f2-a715-17646048f8c0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Serial_mes_ano]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition D_Calendario = calculated
+		mode: import
+		source = ```
+				
+				
+				    VAR DataInicio = IF(MIN(F_Vendas[data_venda])< MIN(F_Vendas[data_entrega_prevista]), MIN(F_Vendas[data_venda]), IF(MIN(F_Vendas[data_entrega_prevista]) < MIN(F_Vendas[data_entrega]), MIN(F_Vendas[data_entrega_prevista]), MIN(F_Vendas[data_entrega])))
+				    VAR DataFim = IF(MAX(F_Vendas[data_entrega])>= MAX(F_Vendas[data_entrega_prevista]), MAX(F_Vendas[data_entrega]), IF(MAX(F_Vendas[data_entrega_prevista])>= MAX(F_Vendas[data_venda]), MAX(F_Vendas[data_entrega_prevista]), MAX(F_Vendas[data_venda])))
+				
+				RETURN
+				
+				ADDCOLUMNS(
+				    CALENDAR(DataInicio, DataFim),
+				    "Ano", YEAR([Date]),
+				    "Mes_Nome", FORMAT([Date], "MMMM"),
+				    "Mes_Numero", MONTH([Date]),
+				    "Mes_ano", FORMAT([Date], "mm-yyyy"),
+				    "Serial_mes_ano", FORMAT([Date], "yyyymm")
+				
+				
+				)
+				```
+
+	annotation PBI_Id = 792482f61b3e4b7483bd7da508308e50
+

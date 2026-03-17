@@ -1,0 +1,44 @@
+table D_Carimbo
+	lineageTag: e4c0d503-b723-44d2-bfef-77b84d02f8a9
+
+	column Carimbo
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 7d3ddeef-2d2b-4997-a31a-288e1eb672a3
+		summarizeBy: none
+		sourceColumn: Carimbo
+
+		variation Variation
+			isDefault
+			relationship: c79b9f0c-1bb5-4115-9a39-dc36c1fb3ef7
+			defaultHierarchy: LocalDateTable_2ba107ea-7c31-485c-a8c6-14d4f0e46250.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Carimbo_ajuste = "Última atualização em "&FORMAT(D_Carimbo[Carimbo], "dd/mm/yyyy")
+		lineageTag: 68c53fc1-4f6d-40eb-8fa0-2aad2e8b09e1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition D_Carimbo = m
+		mode: import
+		queryGroup: Ouro
+		source =
+				let
+				    Fonte = Original,
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"Relatório de vendas", type text}}),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Tipo Alterado", each Text.StartsWith([Relatório de vendas], "Atua")),
+				    #"Outras Colunas Removidas" = Table.SelectColumns(#"Linhas Filtradas",{"Relatório de vendas"}),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Outras Colunas Removidas",{{"Relatório de vendas", "Carimbo"}}),
+				    #"Texto Extraído Após o Delimitador" = Table.TransformColumns(#"Colunas Renomeadas", {{"Carimbo", each Text.AfterDelimiter(_, " "), type text}}),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Texto Extraído Após o Delimitador",{{"Carimbo", type date}})
+				in
+				    #"Tipo Alterado1"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

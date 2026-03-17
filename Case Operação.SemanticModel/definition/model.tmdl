@@ -1,0 +1,44 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		fastCombine
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Bronze
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Prata
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup Ouro
+
+	annotation PBI_QueryGroupOrder = 2
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Original","D_Carimbo","D_Municipio","F_Vendas","Step_fim","Step_mapa","municipios_ibge_api","Step_municipios","Step_ibge","fnRemoverAcentos","UTP","MUNICIPIOS"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table D_Carimbo
+ref table DateTableTemplate_5148b867-941c-4f8a-952b-ff2ece79f1bd
+ref table LocalDateTable_2ba107ea-7c31-485c-a8c6-14d4f0e46250
+ref table F_Vendas
+ref table D_Calendario
+ref table @_Medidas
+ref table D_Municipio
+ref table Parametro_1
+ref table Altera_Medida
+ref table data_teste
+ref table LocalDateTable_1105e502-7a86-4edf-afbc-171864cdf1ed
+ref table date_teste_2
+ref table LocalDateTable_bea867a2-9b21-4947-9e4b-85fb6a4cc1d6
+ref table LocalDateTable_c789afb9-26cb-476e-a084-8e1c3d6698c6
+
+ref cultureInfo pt-BR
+
